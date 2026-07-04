@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Asgardia — Minecraft Sunucusu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Manrope:wght@400;500;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --void: #0a0908;
+    --panel: #16130f;
+    --panel-2: #1d1811;
+    --gold: #c9a227;
+    --gold-bright: #f0c948;
+    --bronze: #6e5420;
+    --ink: #ece6d8;
+    --ink-dim: #a89e8a;
+    --siradan: #e8e4da;
+    --nadir: #5aa0e0;
+    --destansi: #a668e0;
+    --efsanevi: #f0c948;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--void);
+    color: var(--ink);
+    font-family: 'Manrope', sans-serif;
+    overflow-x: hidden;
+  }
+
+  .display { font-family: 'Cinzel', serif; }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+
+  a { color: inherit; text-decoration: none; }
+
+  ::selection { background: var(--gold); color: var(--void); }
+
+  /* ---------- Ember/Particle Background ---------- */
+  #embers {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ---------- Nav ---------- */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 50;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 22px clamp(20px, 5vw, 64px);
+    background: linear-gradient(180deg, rgba(10,9,8,0.9), rgba(10,9,8,0));
+    backdrop-filter: blur(2px);
+  }
+
+  .brand {
+    font-family: 'Cinzel', serif;
+    font-weight: 900;
+    font-size: 20px;
+    letter-spacing: 0.12em;
+    color: var(--gold-bright);
+  }
+
+  nav .links { display: flex; gap: 36px; font-size: 14px; font-weight: 500; color: var(--ink-dim); }
+  nav .links a:hover { color: var(--gold-bright); }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 120px 24px 80px;
+    z-index: 1;
+  }
+
+  .eyebrow {
+    font-size: 13px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 28px;
+    opacity: 0;
+    animation: rise 1s ease forwards 0.1s;
+  }
+
+  .wordmark {
+    font-size: clamp(64px, 13vw, 168px);
+    font-weight: 900;
+    line-height: 0.95;
+    background: linear-gradient(180deg, var(--gold-bright) 0%, var(--gold) 55%, var(--bronze) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 0 40px rgba(201,162,39,0.25));
+    opacity: 0;
+    animation: rise 1.1s ease forwards 0.25s;
+  }
+
+  .tagline {
+    margin-top: 22px;
+    font-size: clamp(16px, 2vw, 20px);
+    color: var(--ink-dim);
+    max-width: 560px;
+    line-height: 1.6;
+    opacity: 0;
+    animation: rise 1s ease forwards 0.5s;
+  }
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .ip-box {
+    margin-top: 44px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--panel);
+    border: 1px solid var(--bronze);
+    padding: 14px 20px;
+    border-radius: 8px;
+    opacity: 0;
+    animation: rise 1s ease forwards 0.7s;
+  }
+
+  .ip-box .ip-text { font-size: 17px; letter-spacing: 0.03em; color: var(--ink); }
+  .ip-box .copy-btn {
+    background: var(--gold);
+    color: var(--void);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    font-family: 'Manrope', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .ip-box .copy-btn:hover { background: var(--gold-bright); }
+  .ip-box .copy-btn:focus-visible { outline: 2px solid var(--gold-bright); outline-offset: 2px; }
+
+  .cta-row {
+    margin-top: 26px;
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+    opacity: 0;
+    animation: rise 1s ease forwards 0.85s;
+  }
+
+  .btn {
+    padding: 13px 28px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.02em;
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: inline-block;
+  }
+  .btn:hover { transform: translateY(-2px); }
+  .btn:focus-visible { outline: 2px solid var(--gold-bright); outline-offset: 2px; }
+  .btn-ghost { border: 1px solid var(--bronze); color: var(--ink); }
+  .btn-ghost:hover { border-color: var(--gold); box-shadow: 0 4px 24px rgba(201,162,39,0.15); }
+
+  .stats {
+    margin-top: 52px;
+    display: flex;
+    gap: 40px;
+    font-size: 13px;
+    color: var(--ink-dim);
+    opacity: 0;
+    animation: rise 1s ease forwards 1s;
+  }
+  .stats b { color: var(--gold-bright); font-family: 'JetBrains Mono', monospace; }
+
+  /* ---------- Bifrost Divider (signature element) ---------- */
+  .bifrost {
+    position: relative;
+    height: 140px;
+    z-index: 1;
+    overflow: hidden;
+  }
+  .bifrost svg { width: 100%; height: 100%; display: block; }
+  .bifrost-line {
+    fill: none;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    filter: drop-shadow(0 0 6px currentColor);
+  }
+  .bifrost .l1 { stroke: #3fa5c2; }
+  .bifrost .l2 { stroke: #7a6fd8; }
+  .bifrost .l3 { stroke: #a668e0; }
+  .bifrost .l4 { stroke: var(--gold); }
+  .bifrost .l5 { stroke: var(--gold-bright); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .bifrost-line { stroke-dasharray: 1400; stroke-dashoffset: 1400; animation: draw 2.4s ease forwards; }
+    .l1 { animation-delay: 0s; }
+    .l2 { animation-delay: 0.08s; }
+    .l3 { animation-delay: 0.16s; }
+    .l4 { animation-delay: 0.24s; }
+    .l5 { animation-delay: 0.32s; }
+  }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+
+  /* ---------- Section shared ---------- */
+  section { position: relative; z-index: 1; padding: 40px clamp(20px, 6vw, 100px) 120px; }
+  .section-head { text-align: center; max-width: 640px; margin: 0 auto 64px; }
+  .section-eyebrow { font-size: 12px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; }
+  .section-title { font-family: 'Cinzel', serif; font-weight: 600; font-size: clamp(28px, 4vw, 42px); }
+  .section-sub { margin-top: 14px; color: var(--ink-dim); font-size: 15px; line-height: 1.7; }
+
+  /* ---------- Features ---------- */
+  .features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1px;
+    background: var(--bronze);
+    border: 1px solid var(--bronze);
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .feature-card {
+    background: var(--panel);
+    padding: 36px 30px;
+    transition: background 0.25s;
+  }
+  .feature-card:hover { background: var(--panel-2); }
+  .feature-icon { font-size: 26px; margin-bottom: 18px; display: block; }
+  .feature-card h3 { font-family: 'Cinzel', serif; font-size: 17px; font-weight: 600; color: var(--gold-bright); margin-bottom: 10px; }
+  .feature-card p { font-size: 14px; color: var(--ink-dim); line-height: 1.65; }
+
+  /* ---------- Store ---------- */
+  .tiers {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 22px;
+    max-width: 1180px;
+    margin: 0 auto;
+  }
+
+  .tier-card {
+    background: var(--panel);
+    border: 1px solid var(--bronze);
+    border-radius: 10px;
+    padding: 32px 26px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    transition: transform 0.25s, border-color 0.25s;
+  }
+  .tier-card:hover { transform: translateY(-6px); }
+
+  .tier-card.siradan  { --tier-color: var(--siradan); }
+  .tier-card.nadir    { --tier-color: var(--nadir); }
+  .tier-card.destansi { --tier-color: var(--destansi); }
+  .tier-card.efsanevi { --tier-color: var(--efsanevi); border-color: var(--gold); }
+  .tier-card:hover { border-color: var(--tier-color); }
+
+  .tier-label {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--tier-color);
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+  .tier-name { font-family: 'Cinzel', serif; font-size: 24px; font-weight: 600; margin-bottom: 6px; }
+  .tier-price { font-family: 'JetBrains Mono', monospace; font-size: 28px; color: var(--tier-color); margin: 14px 0 22px; }
+  .tier-price span { font-size: 13px; color: var(--ink-dim); font-family: 'Manrope', sans-serif; }
+
+  .tier-list { list-style: none; margin-bottom: 28px; flex-grow: 1; }
+  .tier-list li {
+    font-size: 13.5px;
+    color: var(--ink-dim);
+    padding: 7px 0;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    gap: 10px;
+  }
+  .tier-list li:first-child { border-top: none; }
+  .tier-list li::before { content: "✦"; color: var(--tier-color); flex-shrink: 0; }
+
+  .tier-buy {
+    text-align: center;
+    padding: 12px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 13.5px;
+    background: var(--tier-color);
+    color: var(--void);
+    transition: filter 0.2s;
+  }
+  .tier-buy:hover { filter: brightness(1.12); }
+  .tier-buy:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+  .tier-card.efsanevi .tier-corner {
+    position: absolute; top: 0; right: 24px;
+    background: var(--gold);
+    color: var(--void);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    padding: 5px 10px;
+    border-radius: 0 0 6px 6px;
+  }
+
+  .store-note {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 13px;
+    color: var(--ink-dim);
+  }
+
+  /* ---------- Footer ---------- */
+  footer {
+    position: relative; z-index: 1;
+    border-top: 1px solid var(--bronze);
+    padding: 40px clamp(20px, 6vw, 100px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-size: 13px;
+    color: var(--ink-dim);
+  }
+  footer .discord {
+    background: var(--panel-2);
+    border: 1px solid var(--bronze);
+    padding: 9px 18px;
+    border-radius: 6px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  footer .discord:hover { border-color: var(--gold); color: var(--gold-bright); }
+  .disclaimer { width: 100%; text-align: center; font-size: 11px; opacity: 0.5; margin-top: 8px; }
+
+  /* ---------- Scroll reveal ---------- */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.in { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 640px) {
+    nav .links { display: none; }
+    .stats { flex-direction: column; gap: 10px; align-items: center; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="embers"></canvas>
+
+<nav>
+  <div class="brand">ASGARDIA</div>
+  <div class="links">
+    <a href="#ozellikler">Özellikler</a>
+    <a href="#magaza">Mağaza</a>
+    <a href="#discord">Discord</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="eyebrow">Bir Norse Destanı İçinde Hayatta Kal</div>
+  <h1 class="wordmark">ASGARDIA</h1>
+  <p class="tagline">Tanrıların terk ettiği bir dünyada, kendi efsaneni kendin yazarsın. Kasalar, spawnerlar ve daha fazlası — bambaşka bir hayatta kalma deneyimi seni bekliyor.</p>
+
+  <div class="ip-box">
+    <span class="ip-text mono">asgardia.redstone.tr</span>
+    <button class="copy-btn" onclick="copyIP(this)">Kopyala</button>
+  </div>
+
+  <div class="cta-row">
+    <a href="#magaza" class="btn btn-ghost">Mağazayı Gör</a>
+    <a href="#discord" class="btn btn-ghost">Discord'a Katıl</a>
+  </div>
+
+  <div class="stats">
+    <div>Sürüm <b>1.21.11</b></div>
+    <div>Tür <b>Survival</b></div>
+    <div>Durum <b>Çevrimiçi</b></div>
+  </div>
+</header>
+
+<div class="bifrost" aria-hidden="true">
+  <svg viewBox="0 0 1000 140" preserveAspectRatio="none">
+    <path class="bifrost-line l1" d="M0,110 Q250,20 500,70 T1000,40" />
+    <path class="bifrost-line l2" d="M0,118 Q250,32 500,80 T1000,50" />
+    <path class="bifrost-line l3" d="M0,126 Q250,44 500,90 T1000,60" />
+    <path class="bifrost-line l4" d="M0,134 Q250,56 500,100 T1000,70" />
+    <path class="bifrost-line l5" d="M0,142 Q250,68 500,110 T1000,80" />
+  </svg>
+</div>
+
+<section id="ozellikler">
+  <div class="section-head reveal">
+    <div class="section-eyebrow">Neler Var</div>
+    <h2 class="section-title">Asgard'a Özgü Sistemler</h2>
+    <p class="section-sub">Sıfırdan yazılmış, sadece bu sunucuya özel eklentilerle standart bir Minecraft sunucusundan çok daha fazlası.</p>
+  </div>
+
+  <div class="features reveal">
+    <div class="feature-card">
+      <span class="feature-icon">🎋</span>
+      <h3>Bambu & Panda Kasaları</h3>
+      <p>Sıradan'dan Efsanevi'ye 4 nadirlik seviyesi, gerçek 3D bambu aletler ve tam zırh setleriyle özel tasarlanmış kasa sistemi.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🐺</span>
+      <h3>Türkçe Spawner Sistemi</h3>
+      <p>Oyundaki hemen her canavarın Türkçe isimli spawner'ı — İpeksi Dokunuşu ile kırıp taşı, istediğin yere kur.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🤖</span>
+      <h3>AskarBOT</h3>
+      <p>/ai yazınca aktifleşen, tamamen özel bir yapay zeka sohbeti — kimse konuşmanı görmez.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🌍</span>
+      <h3>Anlık Çeviri</h3>
+      <p>Nereden bağlanırsan bağlan, sohbet otomatik olarak senin dilinde görünür — herkes kendi dilinde okur.</p>
+    </div>
+  </div>
+</section>
+
+<section id="magaza">
+  <div class="section-head reveal">
+    <div class="section-eyebrow">Asgard Hazineleri</div>
+    <h2 class="section-title">Mağaza</h2>
+    <p class="section-sub">Satın aldığın her şey birkaç saniye içinde hesabına otomatik olarak tanımlanır.</p>
+  </div>
+
+  <div class="tiers reveal">
+    <div class="tier-card siradan">
+      <div class="tier-label">Sıradan</div>
+      <div class="tier-name">Çırak</div>
+      <div class="tier-price">₺XX <span>/ ay</span></div>
+      <ul class="tier-list">
+        <li>Özel sohbet rengi</li>
+        <li>/kit çırak</li>
+        <li>2 ev noktası (/home)</li>
+      </ul>
+      <a href="#" class="tier-buy">Satın Al</a>
+    </div>
+
+    <div class="tier-card nadir">
+      <div class="tier-label">Nadir</div>
+      <div class="tier-name">Muhafız</div>
+      <div class="tier-price">₺XX <span>/ ay</span></div>
+      <ul class="tier-list">
+        <li>Çırak'taki her şey</li>
+        <li>/kit muhafız</li>
+        <li>5 ev noktası</li>
+        <li>Uçma izni (arazinde)</li>
+      </ul>
+      <a href="#" class="tier-buy">Satın Al</a>
+    </div>
+
+    <div class="tier-card destansi">
+      <div class="tier-label">Destansı</div>
+      <div class="tier-name">Einherjar</div>
+      <div class="tier-price">₺XX <span>/ ay</span></div>
+      <ul class="tier-list">
+        <li>Muhafız'daki her şey</li>
+        <li>/kit einherjar</li>
+        <li>10 ev noktası</li>
+        <li>Özel parçacık efekti</li>
+      </ul>
+      <a href="#" class="tier-buy">Satın Al</a>
+    </div>
+
+    <div class="tier-card efsanevi">
+      <div class="tier-corner">EN İYİSİ</div>
+      <div class="tier-label">Efsanevi</div>
+      <div class="tier-name">Æsir</div>
+      <div class="tier-price">₺XX <span>/ ay</span></div>
+      <ul class="tier-list">
+        <li>Einherjar'daki her şey</li>
+        <li>/kit aesir</li>
+        <li>Sınırsız ev noktası</li>
+        <li>Özel spawner seçme hakkı</li>
+        <li>Discord'da özel rütbe</li>
+      </ul>
+      <a href="#" class="tier-buy">Satın Al</a>
+    </div>
+  </div>
+
+  <p class="store-note">Ödemeler güvenli bir şekilde işlenir. Satın alma sonrası ürünün hesabına tanımlanması birkaç dakika sürebilir.</p>
+</section>
+
+<footer id="discord">
+  <div>© 2026 Asgardia. Tüm hakları saklıdır.</div>
+  <a href="#" class="discord">Discord Sunucumuza Katıl →</a>
+  <div class="disclaimer">Asgardia, Mojang veya Microsoft ile bağlantılı değildir ve onlar tarafından onaylanmamıştır.</div>
+</footer>
+
+<script>
+  function copyIP(btn) {
+    navigator.clipboard.writeText('asgardia.redstone.tr').then(() => {
+      const original = btn.textContent;
+      btn.textContent = 'Kopyalandı!';
+      setTimeout(() => { btn.textContent = original; }, 1800);
+    });
+  }
+
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el => io.observe(el));
+
+  // Ember particle background (subtle, respects reduced motion)
+  const canvas = document.getElementById('embers');
+  const ctx = canvas.getContext('2d');
+  let w, h, particles;
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function resize() {
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  function initParticles() {
+    particles = Array.from({ length: 34 }, () => ({
+      x: Math.random() * w,
+      y: h + Math.random() * h,
+      r: 0.6 + Math.random() * 1.8,
+      speed: 0.15 + Math.random() * 0.4,
+      drift: (Math.random() - 0.5) * 0.3,
+      alpha: 0.1 + Math.random() * 0.35
+    }));
+  }
+  initParticles();
+
+  function tick() {
+    ctx.clearRect(0, 0, w, h);
+    particles.forEach(p => {
+      p.y -= p.speed;
+      p.x += p.drift;
+      if (p.y < -10) { p.y = h + 10; p.x = Math.random() * w; }
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(201, 162, 39, ${p.alpha})`;
+      ctx.fill();
+    });
+    if (!prefersReducedMotion) requestAnimationFrame(tick);
+  }
+  if (!prefersReducedMotion) tick();
+</script>
+
+</body>
+</html>
