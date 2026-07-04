@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eşya Mağazası — Asgardia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Manrope:wght@400;500;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --void: #0a0908;
+    --panel: #16130f;
+    --panel-2: #1d1811;
+    --gold: #c9a227;
+    --gold-bright: #f0c948;
+    --bronze: #6e5420;
+    --ink: #ece6d8;
+    --ink-dim: #a89e8a;
+    --red: #a11c1c;
+    --red-bright: #d13a3a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--void);
+    color: var(--ink);
+    font-family: 'Manrope', sans-serif;
+  }
+
+  .display { font-family: 'Cinzel', serif; }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+  a { color: inherit; text-decoration: none; }
+  ::selection { background: var(--red-bright); color: #fff; }
+
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px clamp(20px, 5vw, 64px);
+    background: rgba(10,9,8,0.92);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--bronze);
+  }
+  .brand { font-family: 'Cinzel', serif; font-weight: 900; font-size: 19px; letter-spacing: 0.1em; color: var(--gold-bright); }
+  .back-link { font-size: 13.5px; color: var(--ink-dim); font-weight: 600; }
+  .back-link:hover { color: var(--gold-bright); }
+
+  header.top {
+    text-align: center;
+    padding: 70px 24px 50px;
+  }
+  .eyebrow { font-size: 12px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--red-bright); margin-bottom: 18px; }
+  h1.title {
+    font-family: 'Cinzel', serif;
+    font-weight: 900;
+    font-size: clamp(38px, 7vw, 64px);
+    background: linear-gradient(180deg, #fff 0%, var(--red-bright) 70%, var(--red) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .sub { margin-top: 16px; color: var(--ink-dim); max-width: 520px; margin-inline: auto; line-height: 1.6; }
+
+  section { padding: 20px clamp(20px, 6vw, 100px) 90px; max-width: 1180px; margin: 0 auto; }
+  .section-title {
+    font-family: 'Cinzel', serif;
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-title .icon { font-size: 22px; }
+  .section-desc { color: var(--ink-dim); font-size: 14px; margin-bottom: 32px; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 20px;
+  }
+
+  .item-card {
+    background: var(--panel);
+    border: 1px solid var(--bronze);
+    border-radius: 10px;
+    padding: 26px 22px;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.25s, border-color 0.25s;
+  }
+  .item-card:hover { transform: translateY(-5px); border-color: var(--red-bright); }
+
+  .item-icon { font-size: 30px; margin-bottom: 14px; }
+  .item-name { font-family: 'Cinzel', serif; font-size: 17px; font-weight: 600; color: var(--gold-bright); margin-bottom: 6px; }
+  .item-desc { font-size: 13px; color: var(--ink-dim); line-height: 1.55; margin-bottom: 18px; flex-grow: 1; }
+  .item-price { font-family: 'JetBrains Mono', monospace; font-size: 20px; color: var(--red-bright); margin-bottom: 16px; }
+  .item-price span { font-size: 12px; color: var(--ink-dim); font-family: 'Manrope', sans-serif; }
+
+  .buy-btn {
+    text-align: center;
+    padding: 11px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 13px;
+    background: var(--red-bright);
+    color: #fff;
+    transition: filter 0.2s;
+  }
+  .buy-btn:hover { filter: brightness(1.15); }
+  .buy-btn:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+
+  .currency-card { border-color: var(--gold); }
+  .currency-card:hover { border-color: var(--gold-bright); }
+  .currency-card .item-price { color: var(--gold-bright); }
+  .currency-card .buy-btn { background: var(--gold); color: var(--void); }
+
+  .divider { height: 1px; background: var(--bronze); margin: 0 auto 60px; max-width: 1180px; opacity: 0.5; }
+
+  footer {
+    border-top: 1px solid var(--bronze);
+    padding: 32px clamp(20px, 6vw, 100px);
+    text-align: center;
+    font-size: 12px;
+    color: var(--ink-dim);
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="brand">ASGARDIA</div>
+  <a href="index.html" class="back-link">← Ana Sayfaya Dön</a>
+</nav>
+
+<header class="top">
+  <div class="eyebrow">Asgard Cephaneliği</div>
+  <h1 class="title">Eşya Mağazası</h1>
+  <p class="sub">Kasa anahtarları, özel spawnerlar ve oyun parası — satın aldığın her şey birkaç dakika içinde hesabına tanımlanır.</p>
+</header>
+
+<section>
+  <div class="section-title"><span class="icon">🗝️</span> Kasa Anahtarları</div>
+  <p class="section-desc">Her anahtar sadece kendi kasasını açar. Kasaları sunucudaki ilgili sandık, Sınama Çağrısı ya da Vault'ta bulabilirsin.</p>
+
+  <div class="grid">
+    <div class="item-card">
+      <div class="item-icon">🗝️</div>
+      <div class="item-name">Oyuncu Kasası Anahtarı</div>
+      <div class="item-desc">Demir/Elmas takım ve set, Netherite külçe, büyülü kitaplar içeren kasayı açar.</div>
+      <div class="item-price">₺XX <span>/ adet</span></div>
+      <a href="#" class="buy-btn">Satın Al</a>
+    </div>
+
+    <div class="item-card">
+      <div class="item-icon">⛏️</div>
+      <div class="item-name">Madenci Kasası Anahtarı</div>
+      <div class="item-desc">Cevherler, elmas yığınları, büyülü kazmalar ve Madenci Kaskı'nı içeren kasayı açar.</div>
+      <div class="item-price">₺XX <span>/ adet</span></div>
+      <a href="#" class="buy-btn">Satın Al</a>
+    </div>
+
+    <div class="item-card">
+      <div class="item-icon">🐺</div>
+      <div class="item-name">Sınama Anahtarı</div>
+      <div class="item-desc">Sınama Çağrısı'na bağlı Spawner Kasası'nı açar — hayvan ve canavar spawner'ları kazanma şansı.</div>
+      <div class="item-price">₺XX <span>/ adet</span></div>
+      <a href="#" class="buy-btn">Satın Al</a>
+    </div>
+
+    <div class="item-card">
+      <div class="item-icon">✨</div>
+      <div class="item-name">Ominous Sınama Anahtarı</div>
+      <div class="item-desc">Vault'a bağlı VIP Kasası'nı açar — korumalı elmas zırh setleri ve nadir spawner'lar içerir.</div>
+      <div class="item-price">₺XX <span>/ adet</span></div>
+      <a href="#" class="buy-btn">Satın Al</a>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section>
+  <div class="section-title"><span class="icon">🗿</span> Özel Spawnerlar</div>
+  <p class="section-desc">Doğrudan envanterine gelir, istediğin yere kurabilirsin.</p>
+
+  <div class="grid">
+    <div class="item-card">
+      <div class="item-icon">🗿</div>
+      <div class="item-name">Iron Golem Spawner</div>
+      <div class="item-desc">Sürekli Iron Golem üreten özel spawner. İpeksi Dokunuşu ile kırıp taşıyabilirsin.</div>
+      <div class="item-price">₺XX <span>/ adet</span></div>
+      <a href="#" class="buy-btn">Satın Al</a>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section>
+  <div class="section-title"><span class="icon">💰</span> Oyun Parası</div>
+  <p class="section-desc">Sunucu ekonomisinde geçerli, hesabına anında yüklenir.</p>
+
+  <div class="grid">
+    <div class="item-card currency-card">
+      <div class="item-icon">💰</div>
+      <div class="item-name">1.000 Asgard Parası</div>
+      <div class="item-desc">Küçük ihtiyaçların için hızlı bir başlangıç paketi.</div>
+      <div class="item-price">₺XX</div>
+      <a href="#" class="buy-btn">Satın Al</a>
+    </div>
+
+    <div class="item-card currency-card">
+      <div class="item-icon">💰</div>
+      <div class="item-name">5.000 Asgard Parası</div>
+      <div class="item-desc">Orta ölçekli alışverişler ve yatırımlar için ideal.</div>
+      <div class="item-price">₺XX</div>
+      <a href="#" class="buy-btn">Satın Al</a>
+    </div>
+
+    <div class="item-card currency-card">
+      <div class="item-icon">💰</div>
+      <div class="item-name">15.000 Asgard Parası</div>
+      <div class="item-desc">Daha büyük hedefler için avantajlı paket.</div>
+      <div class="item-price">₺XX</div>
+      <a href="#" class="buy-btn">Satın Al</a>
+    </div>
+
+    <div class="item-card currency-card">
+      <div class="item-icon">💰</div>
+      <div class="item-name">50.000 Asgard Parası</div>
+      <div class="item-desc">En avantajlı oran — büyük planların için.</div>
+      <div class="item-price">₺XX</div>
+      <a href="#" class="buy-btn">Satın Al</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  © 2026 Asgardia. Tüm hakları saklıdır. · Asgardia, Mojang veya Microsoft ile bağlantılı değildir.
+</footer>
+
+</body>
+</html>
