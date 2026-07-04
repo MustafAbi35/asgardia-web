@@ -327,6 +327,46 @@
     color: var(--ink-dim);
   }
 
+  /* ---------- Eşya Mağazası (kırmızı) butonu ---------- */
+  .item-shop-btn {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    max-width: 640px;
+    margin: 56px auto 0;
+    padding: 22px 28px;
+    background: linear-gradient(135deg, #7a1414, #a11c1c);
+    border: 1px solid #d13a3a;
+    border-radius: 10px;
+    box-shadow: 0 8px 30px rgba(161,28,28,0.25);
+    transition: transform 0.25s, box-shadow 0.25s;
+  }
+  .item-shop-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 36px rgba(161,28,28,0.4);
+  }
+  .item-shop-btn:focus-visible { outline: 2px solid #ffb3b3; outline-offset: 3px; }
+  .item-shop-icon { font-size: 28px; flex-shrink: 0; }
+  .item-shop-btn strong {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 18px;
+    color: #fff;
+    letter-spacing: 0.02em;
+  }
+  .item-shop-btn small {
+    display: block;
+    margin-top: 4px;
+    font-size: 12.5px;
+    color: rgba(255,255,255,0.75);
+  }
+  .item-shop-arrow {
+    margin-left: auto;
+    font-size: 22px;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
   /* ---------- Footer ---------- */
   footer {
     position: relative; z-index: 1;
@@ -370,7 +410,6 @@
   <div class="links">
     <a href="#ozellikler">Özellikler</a>
     <a href="#magaza">Mağaza</a>
-    <a href="#discord">Discord</a>
   </div>
 </nav>
 
@@ -386,7 +425,6 @@
 
   <div class="cta-row">
     <a href="#magaza" class="btn btn-ghost">Mağazayı Gör</a>
-    <a href="#discord" class="btn btn-ghost">Discord'a Katıl</a>
   </div>
 
   <div class="stats">
@@ -415,9 +453,9 @@
 
   <div class="features reveal">
     <div class="feature-card">
-      <span class="feature-icon">🎋</span>
-      <h3>Bambu & Panda Kasaları</h3>
-      <p>Sıradan'dan Efsanevi'ye 4 nadirlik seviyesi, gerçek 3D bambu aletler ve tam zırh setleriyle özel tasarlanmış kasa sistemi.</p>
+      <span class="feature-icon">🗝️</span>
+      <h3>4 Farklı Kasa Sistemi</h3>
+      <p>Oyuncu, Madenci, Spawner ve VIP kasaları — her biri kendi ödül havuzuyla; sandık, Sınama Çağrısı ve Vault'a bağlı çalışır.</p>
     </div>
     <div class="feature-card">
       <span class="feature-icon">🐺</span>
@@ -447,11 +485,11 @@
   <div class="tiers reveal">
     <div class="tier-card siradan">
       <div class="tier-label">Sıradan</div>
-      <div class="tier-name">Çırak</div>
+      <div class="tier-name">VIP</div>
       <div class="tier-price">₺XX <span>/ ay</span></div>
       <ul class="tier-list">
         <li>Özel sohbet rengi</li>
-        <li>/kit çırak</li>
+        <li>/kit vip</li>
         <li>2 ev noktası (/home)</li>
       </ul>
       <a href="#" class="tier-buy">Satın Al</a>
@@ -459,11 +497,11 @@
 
     <div class="tier-card nadir">
       <div class="tier-label">Nadir</div>
-      <div class="tier-name">Muhafız</div>
+      <div class="tier-name">VIP+</div>
       <div class="tier-price">₺XX <span>/ ay</span></div>
       <ul class="tier-list">
-        <li>Çırak'taki her şey</li>
-        <li>/kit muhafız</li>
+        <li>VIP'teki her şey</li>
+        <li>/kit vipplus</li>
         <li>5 ev noktası</li>
         <li>Uçma izni (arazinde)</li>
       </ul>
@@ -472,11 +510,11 @@
 
     <div class="tier-card destansi">
       <div class="tier-label">Destansı</div>
-      <div class="tier-name">Einherjar</div>
+      <div class="tier-name">MVIP</div>
       <div class="tier-price">₺XX <span>/ ay</span></div>
       <ul class="tier-list">
-        <li>Muhafız'daki her şey</li>
-        <li>/kit einherjar</li>
+        <li>VIP+'taki her şey</li>
+        <li>/kit mvip</li>
         <li>10 ev noktası</li>
         <li>Özel parçacık efekti</li>
       </ul>
@@ -486,11 +524,11 @@
     <div class="tier-card efsanevi">
       <div class="tier-corner">EN İYİSİ</div>
       <div class="tier-label">Efsanevi</div>
-      <div class="tier-name">Æsir</div>
+      <div class="tier-name">ASGARD</div>
       <div class="tier-price">₺XX <span>/ ay</span></div>
       <ul class="tier-list">
-        <li>Einherjar'daki her şey</li>
-        <li>/kit aesir</li>
+        <li>MVIP'teki her şey</li>
+        <li>/kit asgard</li>
         <li>Sınırsız ev noktası</li>
         <li>Özel spawner seçme hakkı</li>
         <li>Discord'da özel rütbe</li>
@@ -499,12 +537,21 @@
     </div>
   </div>
 
+  <a href="magaza.html" target="_blank" class="item-shop-btn reveal">
+    <span class="item-shop-icon">🗡️</span>
+    <span>
+      <strong>Eşya Mağazası</strong>
+      <small>Kasa anahtarları · Özel spawnerlar · Oyun parası</small>
+    </span>
+    <span class="item-shop-arrow">↗</span>
+  </a>
+
   <p class="store-note">Ödemeler güvenli bir şekilde işlenir. Satın alma sonrası ürünün hesabına tanımlanması birkaç dakika sürebilir.</p>
 </section>
 
-<footer id="discord">
+<footer>
   <div>© 2026 Asgardia. Tüm hakları saklıdır.</div>
-  <a href="#" class="discord">Discord Sunucumuza Katıl →</a>
+  <span class="discord" style="opacity:0.55; cursor:default;" title="Discord sunucumuz yakında açılıyor">Discord — Yakında</span>
   <div class="disclaimer">Asgardia, Mojang veya Microsoft ile bağlantılı değildir ve onlar tarafından onaylanmamıştır.</div>
 </footer>
 
